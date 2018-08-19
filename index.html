@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Cruisers</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="cruises.json"></script>
+  
+  <style>
+     .jumbotron {
+      margin-bottom: 0;      
+      background-image:url('https://www.racq.com.au/-/media/allsites/holidays/hero-banner/suppliers-cruise/po-cruises/relaxingshortbreakwhitsundayscruisesfrompopacificdawn1410x500.ashx');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100%; 
+    }
+  </style>
+</head>
+<body>
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1 >Cruise Shop</h1>      
+    <p style="color:white">Get Your Cruise Here</p>
+  </div>
+</div>
+<hr>
+<div class="container" style="padding: none">    
+  <div class="row">
+    <div id="results"></div>
+  </div>
+</div><br>
+</body>
+</html>
+<script>
+  var xLength=0;
+  function getCruise(index=0){
+     $.getJSON( "cruises.json", function( json ) {
+       xLength=json.length;
+       for (i = index; i<index +3 && i < json.length;i++){         
+         var ship =json[i].ship;
+         var image = json[i].photo;
+         var rating = json[i].rating;
+         var blurb = json[i].info;
+        
+      $('<div>').addClass('col-sm-4').append(
+        $('<div>').addClass('panel panel-primary').append(
+            $('<div>').addClass('panel-heading').text(ship),
+            $('<div>').addClass('panel-body').append(
+              $('<img>').attr({'src':image,'alt':ship, 'style':'width:100%; height: 20em','class':'img-responsive'})
+            ),
+            $('<div>').addClass('panel-footer').text(blurb)  
+        )            
+        ).appendTo('#results');         
+       }     
+     }).done(function(){
+       if (i < xLength){
+          getCruise(i);
+       }       
+     }).fail(function(jqXHR, textStatus, errorThrown) {
+	    alert('Data request failed! ');
+      console.log("incoming Text " + jqXHR.responseText);
+    });
+  }
+
+</script>
+<script>
+  getCruise(0);  
+</script>
